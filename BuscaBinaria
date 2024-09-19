@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define TAMANHO 1000
+
+int comparar(const void* a, const void* b) {
+    return (*(int*)a - *(int*)b);
+}
+
+int busca_binaria(int vetor[], int inicio, int fim, int chave) {
+    if (inicio > fim) {
+        return -1;
+    }
+
+    int meio = (inicio + fim) / 2;
+
+    if (vetor[meio] == chave) {
+        return meio;
+    } else if (vetor[meio] > chave) {
+        return busca_binaria(vetor, inicio, meio - 1, chave);
+    } else {
+        return busca_binaria(vetor, meio + 1, fim, chave);
+    }
+}
+
+void popular_vetor(int vetor[], int tamanho) {
+    srand(time(NULL));
+
+    for (int i = 0; i < tamanho; i++) {
+        vetor[i] = rand() % 1100 + 1;
+    }
+}
+
+void mostrar_vetor(int vetor[], int tamanho) {
+    for (int i = 0; i < tamanho; i++) {
+        printf("%d ", vetor[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int vetor[TAMANHO];
+    int numero, resultado;
+
+    popular_vetor(vetor, TAMANHO);
+
+    qsort(vetor, TAMANHO, sizeof(int), comparar);
+
+    printf("Digite um numero para buscar no vetor: ");
+    scanf("%d", &numero);
+
+    resultado = busca_binaria(vetor, 0, TAMANHO - 1, numero);
+
+    if (resultado != -1) {
+        printf("Numero %d encontrado na posicao %d.\n", numero, resultado);
+    } else {
+        printf("Numero %d nao encontrado no vetor.\n", numero);
+    }
+
+    return 0;
+}
